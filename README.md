@@ -12,15 +12,16 @@ In an attempt to provide prevention this project provides a python script which 
 
 ## The scenario goes like this:
 
-[Client]-----------[FortiWeb]-----------[Web Server]
+[Client]-----[FortiGate]------[FortiWeb]-----------[Web Server]
 
-                     |                        |
+                                |                        |
 
-                     [Fortisandbox]-------[FortiSIEM]
+                               [Fortisandbox]-------[FortiSIEM] 
 
 FortiWeb receives an uploaded file from a client which is then sent to FortiSandbox for inspection
 In the meanwhile, FortiWeb forwards the file to the Web server (a sample php upload page is attached)
-FortiSandbox then issue a verdict which is sent to FortiSIEM via syslog. If the file is malicious a rule on FortiSIEM will trigger the python script (attached) which will connect to the web server (Apache on Linux for this demo) search for the file by its md5 hash and delete it leaving a log in /tmp
+FortiSandbox then issue a verdict which is sent to FortiSIEM via syslog. If the file is malicious a rule on FortiSIEM will trigger the python script (delete_malware.py) which will connect to the web server (Apache on Linux for this demo) search for the file by its md5 hash and delete it leaving a log in /tmp.
+additionally the script puts the source IP uploading the malware into FortiGate Quarantine to block it from further communications.
  
 
 ## Now some mandatory prerequisites:
